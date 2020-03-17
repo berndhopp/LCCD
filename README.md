@@ -2,7 +2,8 @@
 
 Ftc means 'flatten the curve', this project is born to address the current corona-crisis in providing an 
 app that informs users when they may be at risk of being infected but does so with as much privacy as possible.
-It is a replacement of the chinese government's [app dubbed 'close contact detector'](https://thenextweb.com/apps/2020/02/11/coronavirus-app-detector/). 
+It is a replacement of the chinese government's [app dubbed 'close contact detector' (ccd)](https://thenextweb.com/apps/2020/02/11/coronavirus-app-detector/),
+but adapted to value the user's privacy while being just as effective as ccd. 
 
 ###Objective
 
@@ -32,6 +33,9 @@ the binary size. This is what the app should do:
     5) the frontend-part of the app should allow the user to send a mail to infections@ftcapp.org with a copy of his (positive) test results and 
        the UUID that was created in step 1. It may be a better option to create a separate endpoint for this instead of using email, but
        this way it's easier to implement. 
+
+"Nice to have" would be an option for a broadcast to all whatsapp/signal/whatever-contacts after a positive test-result was uploaded, I just don't
+know if there is an API for that. 
       
 ####Server
 
