@@ -9,5 +9,4 @@ public class FtcServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FtcServerApplication.class, args);
 	}
-
 }

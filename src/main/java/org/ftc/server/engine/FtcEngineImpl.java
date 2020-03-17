@@ -40,16 +40,14 @@ public class FtcEngineImpl implements Engine {
     @Autowired
     private ConfirmedCasesRepo confirmedCasesRepo;
 
-    private final double maximumInfectionDistanceMeters = 4d;
-
-    private final long maximumInfectionDurationHours = 24 * 21; //21 days
-
-    //one latitude is ca 111 km
-    private final double TenMetersToOneLatitudeDegreeRatio = 0.00008997741d;
-    private final double FiveMetersToOneLatitudeDegreeRatio = 0.00004498870d;
+    private static final double maximumInfectionDistanceMeters = 4d;
+    private static final long maximumInfectionDurationHours = 24 * 21; //21 days
+    //one degree of latitude is ca 111 km
+    private static final double TenMetersToOneLatitudeDegreeRatio = 0.00008997741d;
+    private static final double FiveMetersToOneLatitudeDegreeRatio = 0.00004498870d;
 
     @Data
-    private class Position {
+    private static class Position {
         private UUID uuid;
         private double latitude;
         private double longitude;
@@ -95,26 +93,27 @@ public class FtcEngineImpl implements Engine {
      *
      *          "positions number 1 and 3, 2 and 3, 2 and 5 are in 4 meters or less proximity to each other"
      *
-     * 4) For every position-pair that is in infectious distance, the 'connectivity' is to be calculated, taking in account historic data
-     *    'Connectivity' between 2 users must always be between 0 and 1. For example, two users that have never been 4 meters or closer to each other have connectivity zero,
-     *    two users that had been waiting for a bus next to each other a couple of days ago have connectivity 0.15 and a married couple spending much time together has a connectivity of
-     *    0.98 ( fictional data ).
-     *
-     * 
-     *
-    */
+     * 4) For every position-pair that is in infectious distance, the 'connectivity' is to be calculated, taking in account historic data. The algorithm to do so is not specified,
+     *    it must be implemented in a way that the 'Connectivity' between 2 users is always between 0 and 1 and for example two users that have never been 4 meters or closer to
+     *    each other have connectivity zero, two users that had been waiting for a bus next to each other a couple of days ago have connectivity 0.15 and a married couple spending
+     *    much time together has a connectivity of 0.98.
+     */
     private void computeAllClosenesses() {
         synchronized (lock) {
-            positions.sort(comparingDouble(Position::getLongitude));
+            if(positions.isEmpty()){
+                return;
+            }
 
-            final double minLongitude = positions.get(0).getLongitude();
-            final double maxLongitude = positions.get(positions.size() - 1).getLongitude();
+            positions.sort(comparingDouble(Position::getLatitude));
+
+            final double minLatitude = positions.get(0).getLatitude();
+            final double maxLatitude = positions.get(positions.size() - 1).getLatitude();
 
             int positionsIndex = 0;
 
-            for (double batchMedianLongitude = minLongitude; batchMedianLongitude <= maxLongitude; batchMedianLongitude += FiveMetersToOneLatitudeDegreeRatio) {
+            for (double batchMedianLatitude = minLatitude; batchMedianLatitude <= maxLatitude; batchMedianLatitude += FiveMetersToOneLatitudeDegreeRatio) {
 
-                final double batchEndLatitude = batchMedianLongitude + TenMetersToOneLatitudeDegreeRatio;
+                final double batchEndLatitude = batchMedianLatitude + TenMetersToOneLatitudeDegreeRatio;
 
                 final List<Position> positionsBatch = new ArrayList<>();
 
@@ -166,7 +165,7 @@ public class FtcEngineImpl implements Engine {
                                     long hoursSinceLastUpdate = Duration.between(connectivity.getLastUpdate(), now()).get(ChronoUnit.HOURS);
 
                                     //if last contact was more than 21 days ago, then it's no longer of interest and we just use the new factor
-                                    if(hoursSinceLastUpdate < maximumInfectionDurationHours){
+                                    if (hoursSinceLastUpdate < maximumInfectionDurationHours) {
                                         //last update was close to 21 days ago -> oldFactorWeight is close to 0
                                         //last update was just now -> oldFactorWeight is close to 1
                                         double oldFactorWeight = 1 - ((double) hoursSinceLastUpdate / (double) maximumInfectionDurationHours);
@@ -197,7 +196,7 @@ public class FtcEngineImpl implements Engine {
         synchronized (lock) {
             Optional<ConfirmedCase> existingConfirmedCase = confirmedCasesRepo.findByUserUUID(userUUID);
 
-            if(existingConfirmedCase.isPresent()){
+            if (existingConfirmedCase.isPresent()) {
                 return 1;
             }
 
