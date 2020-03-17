@@ -100,7 +100,7 @@ public class FtcEngineImpl implements Engine {
      */
     private void computeAllClosenesses() {
         synchronized (lock) {
-            if(positions.isEmpty()){
+            if (positions.isEmpty()) {
                 return;
             }
 
@@ -194,21 +194,36 @@ public class FtcEngineImpl implements Engine {
     @Override
     public float setPositionGetRiskFactor(UUID userUUID, double latitude, double longitude, double altitude) {
         synchronized (lock) {
-            Optional<ConfirmedCase> existingConfirmedCase = confirmedCasesRepo.findByUserUUID(userUUID);
+            final Optional<Position> optionalExistingPosition = positions.stream().filter(p -> p.getUuid().equals(userUUID)).findFirst();
 
-            if (existingConfirmedCase.isPresent()) {
-                return 1;
+            final Position position;
+
+            if (optionalExistingPosition.isPresent()) {
+                position = optionalExistingPosition.get();
+            } else {
+                position = new Position();
+                positions.add(position);
             }
 
-            float riskFactor = 0;
-
-            for (Connectivity connectivityWithConfirmedCase : connectivityRepo.connectivitiesWithConfirmedCases(userUUID)) {
-                //TODO is this the statistically correct algorithm?
-                //2 connectivities with confirmed cases with a factor of 0.5 each, result in a riskfactor of 0.75
-                riskFactor += (1 - riskFactor) * connectivityWithConfirmedCase.getFactor();
-            }
-
-            return riskFactor;
+            position.setLatitude(latitude);
+            position.setLongitude(longitude);
+            position.setAltitude(altitude);
         }
+
+        Optional<ConfirmedCase> existingConfirmedCase = confirmedCasesRepo.findByUserUUID(userUUID);
+
+        if (existingConfirmedCase.isPresent()) {
+            return 1;
+        }
+
+        float riskFactor = 0;
+
+        for (Connectivity connectivityWithConfirmedCase : connectivityRepo.connectivitiesWithConfirmedCases(userUUID)) {
+            //TODO is this the statistically correct algorithm?
+            //2 connectivities with confirmed cases with a factor of 0.5 each, result in a riskfactor of 0.75
+            riskFactor += (1 - riskFactor) * connectivityWithConfirmedCase.getFactor();
+        }
+
+        return riskFactor;
     }
 }
