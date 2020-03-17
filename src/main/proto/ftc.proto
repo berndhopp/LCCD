@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "org.ftc";
+
+message UUIDAndPosition {
+    string UUID = 1;
+    double longitude = 2;
+    double latitude = 3;
+    double altitude = 4;
+}
+
+message RiskEstimation {
+    float riskFactor = 1;
+}
+
+service Service {
+    rpc updatePositionGetRiskEstimation (UUIDAndPosition) returns (RiskEstimation);
+}
