@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.Data;
 
@@ -30,6 +32,8 @@ public class Connectivity {
     @UpdateTimestamp
     private LocalDateTime lastUpdate;
 
+    @Max(1)
+    @Min(0)
     @Column(nullable = false)
     @ColumnDefault("0")
     private double factor;
