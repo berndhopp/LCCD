@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option java_package = "org.ftc";
 
 message UUIDAndPosition {
@@ -13,6 +15,11 @@ message RiskEstimation {
     float riskFactor = 1;
 }
 
+message PhoneNumber{
+    string e164 = 1;
+}
+
 service Service {
     rpc updatePositionGetRiskEstimation (UUIDAndPosition) returns (RiskEstimation);
+    rpc requestUUID(PhoneNumber) returns (google.protobuf.Empty);
 }
