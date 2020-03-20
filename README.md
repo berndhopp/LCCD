@@ -1,13 +1,13 @@
 ###Abstract
 
-Ftc means 'flatten the curve', this project is born to address the current corona-crisis in providing an 
+LibreCCD ist the liberal close contact detector, this project is born to address the current corona-crisis in providing an 
 app that informs users when they may be at risk of being infected but does so with as much privacy as possible.
 It is a replacement of the chinese government's [app dubbed 'close contact detector' (ccd)](https://thenextweb.com/apps/2020/02/11/coronavirus-app-detector/),
 but adapted to value the user's privacy while being just as effective as ccd. 
 
 ###Objective
 
-FTC will not persist any positions of it's users but only use them in memory for a short period of time. It 
+LCCD will not persist any positions of it's users but only use them in memory for a short period of time. It 
 will not ask users for any private data, not even an email-address. And the algorithm will work just as well as an app 
 that creates a complete movement-profile of it's users. Once installed on a phone, the FTC-app will run in background, 
 regularly anonymously transmitting the users geospatial position. If the user had been tested positively on Covid19, he may upload
@@ -16,7 +16,7 @@ Everyone who gets 4 meters or closer to him and has the app installed will be wa
 close proximity with the user in the near past will get a notification that there is a chance he or she got infected. 
 
 ###TODO
-FTC is in a very early stage, I'm just hoping to point out what the objectives are and what needs to be done. 
+LCCD is in a very early stage, I'm just hoping to point out what the objectives are and what needs to be done. 
 Right now, this repository contains a POC, or showcase if you will, of the server-side, that is neither tested nor finished.
 The description of the server-API is a .proto-file [here](https://github.com/berndhopp/ftc/blob/master/src/main/proto/ftc.proto).
 
