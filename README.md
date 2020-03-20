@@ -1,11 +1,13 @@
-###Abstract
+see also https://docs.google.com/presentation/d/1SMKZ6IzuJvDpQ9PDco-NfVt5coR0EUK-4or0HuBZn9Y/edit?usp=sharing
+
+### Abstract
 
 LibreCCD ist the liberal close contact detector, this project is born to address the current corona-crisis in providing an 
 app that informs users when they may be at risk of being infected but does so with as much privacy as possible.
 It is a replacement of the chinese government's [app dubbed 'close contact detector' (ccd)](https://thenextweb.com/apps/2020/02/11/coronavirus-app-detector/),
 but adapted to value the user's privacy while being just as effective as ccd. 
 
-###Objective
+### Objective
 
 LCCD will not persist any positions of it's users but only use them in memory for a short period of time. It 
 will not ask users for any private data, not even an email-address. And the algorithm will work just as well as an app 
@@ -15,12 +17,12 @@ a copy of his test results to our servers and if it is deemed legit, the user is
 Everyone who gets 4 meters or closer to him and has the app installed will be warned and everyone who has the app installed and has been in 
 close proximity with the user in the near past will get a notification that there is a chance he or she got infected. 
 
-###TODO
+### TODO
 LCCD is in a very early stage, I'm just hoping to point out what the objectives are and what needs to be done. 
 Right now, this repository contains a POC, or showcase if you will, of the server-side, that is neither tested nor finished.
 The description of the server-API is a .proto-file [here](https://github.com/berndhopp/ftc/blob/master/src/main/proto/ftc.proto).
 
-####Client
+#### Client
 
 A client-app for iOS and Android needs to be created. I was thinking Xamarin, but then I never created an app and neither do I have the time or
 the knowledge to do this, so I leave this to another volunteer. I'd prefer an native app, but Xamarin would do too, I just  worry about 
@@ -49,7 +51,7 @@ scaleable, see [here](https://github.com/berndhopp/ftc/blob/master/src/main/java
 The PAAS of choice for me is Heroku and I will do some changes on the server to make it deployable to Heroku, which also means the database 
 will need to switch from H2 to Postgres. 
 
-####Marketing
+#### Marketing
 
 This app is will not work unless it is being installed by a large portion of the population. "Population", does not necessarily mean
 all of the country, but for example 60% of berliners need to have the app installed before it will be useful in Berlin. Being in a lockdown
